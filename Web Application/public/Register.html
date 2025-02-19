@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Page (Firebase)</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px #888888;
+    }
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #008000;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #006400;
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    #profilePreview {
+      width: 100px;
+      height: 100px;
+      margin: 10px auto;
+      border: 1px solid #ccc;
+      object-fit: cover;
+      display: none; /* ซ่อนรูปจนกว่าจะมีการอัปโหลด */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>ลงทะเบียนผู้ใช้ใหม่</h2>
+    
+    <!-- ช่องกรอก username -->
+    <input type="text" id="uname" placeholder="Username" required>
+    
+    <!-- ช่องกรอก email -->
+    <input type="email" id="email" placeholder="Email" required>
+    
+    <!-- ช่องกรอก password -->
+    <input type="password" id="password" placeholder="Password" required>
+
+    <!-- ช่องกรอก PhoneNumber -->
+    <input type="tel" id="phonenumber" placeholder="Phone Number" required>
+
+    <!-- ช่องอัปโหลดรูปภาพ -->
+    <input type="file" id="profilePic" accept="image/*">
+
+    <!-- แสดงภาพตัวอย่าง -->
+    <img id="profilePreview" alt="Profile Preview">
+    
+    <!-- ปุ่มยืนยันการลงทะเบียน -->
+    <button type="button" onclick="registerUser()">ยืนยันการลงทะเบียน</button>
+
+    <hr>
+    <button onclick="goBack()">กลับไปหน้า Login</button>
+    
+    <!-- ตำแหน่งแสดงผลลัพธ์หรือ error -->
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // ✅ ตั้งค่า Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPOWp35o6ubJy0SE_PlAqimqa1-siXfVk",
+      authDomain: "webmobileapplication-cdaaf.firebaseapp.com",
+      projectId: "webmobileapplication-cdaaf",
+      storageBucket: "webmobileapplication-cdaaf.appspot.com", // **เพิ่มค่า storageBucket**
+    };
+
+    // ✅ เริ่มต้น Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // ✅ ให้แน่ใจว่า DOM โหลดเสร็จก่อนใช้ JavaScript
+    window.onload = function() {
+      const profilePicInput = document.getElementById("profilePic");
+      const profilePreview = document.getElementById("profilePreview");
+
+      // เมื่อมีการเลือกไฟล์ ให้แสดงรูปตัวอย่าง
+      profilePicInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            profilePreview.src = e.target.result;
+            profilePreview.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        } else {
+          profilePreview.src = "";
+          profilePreview.style.display = "none";
+        }
+      });
+    };
+
+    // ✅ ฟังก์ชันลงทะเบียนผู้ใช้
+    async function registerUser() {
+      const uname = document.getElementById("uname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const phonenumber = document.getElementById("phonenumber").value;
+      const file = document.getElementById("profilePic").files[0];
+
+      // ✅ ตรวจสอบความถูกต้องของข้อมูล
+      if (!uname || !email || !password || !phonenumber) {
+        showMessage("⚠️ กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+      if (password.length < 6) {
+        showMessage("⚠️ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+        return;
+      }
+
+      try {
+        // ✅ สร้างผู้ใช้ใหม่ใน Firebase Auth
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        const uid = user.uid;
+
+        let photoURL = "";
+        if (file) {
+          const storageRef = storage.ref().child(`profile_pictures/${uid}.jpg`);
+          await storageRef.put(file);
+          photoURL = await storageRef.getDownloadURL();
+        }
+
+        // ✅ บันทึกข้อมูลลง Firestore
+        await db.collection("users").doc(uid).set({
+          username: uname,
+          email: email,
+          phonenumber: phonenumber,
+          photo: photoURL,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // ✅ แสดงข้อความสำเร็จ และเปลี่ยนหน้า
+        showMessage("✅ ลงทะเบียนสำเร็จ! กำลังพาไปหน้า Login ...");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+
+      } catch (error) {
+        showMessage("❌ เกิดข้อผิดพลาด: " + error.message);
+      }
+    }
+
+    // ✅ ฟังก์ชันแสดงข้อความ
+    function showMessage(msg) {
+      document.getElementById("message").innerText = msg;
+    }
+
+    // ✅ ฟังก์ชันกลับไปหน้า Login
+    function goBack() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
