@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login with Phone OTP</title>
+    <title>Verify OTP</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -41,7 +40,7 @@
             font-size: 16px;
         }
 
-        .otp-button {
+        .verify-button {
             width: 80%;
             padding: 12px;
             background-color: #7b2ff7;
@@ -53,7 +52,7 @@
             margin-top: 20px;
         }
 
-        .otp-button:hover {
+        .verify-button:hover {
             background-color: #6a1b9a;
         }
 
@@ -69,10 +68,10 @@
 <body>
 
     <div class="otp-container">
-        <h2>กรอกหมายเลขโทรศัพท์</h2>
-        <input type="text" class="input-field" id="phone" placeholder="กรอกหมายเลขโทรศัพท์ (เช่น +1234567890)" required>
-        <button class="otp-button" onclick="sendOTP()">ส่ง OTP</button>
-        <a href="login.html" class="back-link">กลับไปหน้าล็อกอิน</a>
+        <h2>กรอกรหัส OTP</h2>
+        <input type="text" class="input-field" id="otp" placeholder="กรอกรหัส OTP ที่ได้รับ" required>
+        <button class="verify-button" onclick="verifyOTP()">ยืนยัน OTP</button>
+        <a href="otp.html" class="back-link">กลับไปกรอกหมายเลขโทรศัพท์อีกครั้ง</a>
     </div>
 
     <script>
@@ -84,35 +83,20 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        // Phone OTP Authentication
-        let confirmationResult;
+        // OTP Verification
+        let confirmationResult = JSON.parse(localStorage.getItem("confirmationResult"));
 
-        function sendOTP() {
-            const phoneNumber = document.getElementById("phone").value;
+        function verifyOTP() {
+            const otp = document.getElementById("otp").value;
 
-            if (!phoneNumber) {
-                alert("กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง!");
-                return;
-            }
-
-            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('otp-container', {
-                size: 'normal',
-                callback: function(response) {
-                    console.log("Recaptcha verified");
-                }
-            });
-
-            const appVerifier = window.recaptchaVerifier;
-
-            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+            confirmationResult.confirm(otp)
                 .then((result) => {
-                    confirmationResult = result;
-                    alert("OTP ได้ถูกส่งไปยังหมายเลขของคุณ");
-                    // ให้ผู้ใช้ยืนยัน OTP ต่อในหน้าถัดไป
-                    window.location.href = "verifyOTP.html"; // เปลี่ยนเป็นหน้าให้กรอก OTP
+                    const user = result.user;
+                    console.log("User verified with OTP: ", user);
+                    window.location.href = "index.html"; // เปลี่ยนไปยังหน้าหลัก
                 })
                 .catch((error) => {
-                    alert(error.message);
+                    alert("OTP ไม่ถูกต้อง!");
                 });
         }
     </script>
