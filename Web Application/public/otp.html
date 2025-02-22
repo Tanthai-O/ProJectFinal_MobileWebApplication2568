@@ -67,14 +67,13 @@
     </style>
 </head>
 <body>
-
     <div class="otp-container">
-        <h2>กรอกหมายเลขโทรศัพท์</h2>
-        <input type="text" class="input-field" id="phone" placeholder="กรอกหมายเลขโทรศัพท์ (เช่น +1234567890)" required>
-        <button class="otp-button" onclick="sendOTP()">ส่ง OTP</button>
-        <a href="login.html" class="back-link">กลับไปหน้าล็อกอิน</a>
+        <h2>Enter Phone Number</h2>
+        <input type="text" class="input-field" id="phone" placeholder="Enter phone number (e.g. +1234567890)" required>
+        <button class="otp-button" onclick="sendOTP()">Send OTP</button>
+        <a href="login.html" class="back-link">Back to Login</a>
     </div>
-
+    
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -83,39 +82,38 @@
             projectId: "projectfinalwebapplication2568"
         };
         firebase.initializeApp(firebaseConfig);
-
+    
         // Phone OTP Authentication
         let confirmationResult;
-
+    
         function sendOTP() {
             const phoneNumber = document.getElementById("phone").value;
-
+    
             if (!phoneNumber) {
-                alert("กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง!");
+                alert("Please enter a valid phone number!");
                 return;
             }
-
+    
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('otp-container', {
                 size: 'normal',
                 callback: function(response) {
                     console.log("Recaptcha verified");
                 }
             });
-
+    
             const appVerifier = window.recaptchaVerifier;
-
+    
             firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
                 .then((result) => {
                     confirmationResult = result;
-                    alert("OTP ได้ถูกส่งไปยังหมายเลขของคุณ");
-                    // ให้ผู้ใช้ยืนยัน OTP ต่อในหน้าถัดไป
-                    window.location.href = "verifyOTP.html"; // เปลี่ยนเป็นหน้าให้กรอก OTP
+                    alert("OTP has been sent to your phone number");
+                    // Direct user to OTP verification page
+                    window.location.href = "verifyOTP.html"; // Redirect to the OTP verification page
                 })
                 .catch((error) => {
                     alert(error.message);
                 });
         }
-    </script>
-
+    </script>    
 </body>
 </html>

@@ -9,58 +9,80 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
+        /* Minimal & Modern Notion-Inspired Theme */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: #f7f7f8; /* Background color similar to Notion */
+            color: #333; /* Dark text for contrast */
             margin: 0;
-        }
-        .container {
-            background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #888888;
-            width: 300px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff; /* White background like Notion */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c2c2c; /* Dark text for the heading */
             text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
+
+        /* Input fields */
         input {
-            width: calc(100% - 20px);
-            padding: 10px;
+            width: 93%;
+            padding: 12px 20px;
             margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: block;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            background-color: #f7f7f8; /* Light background for input fields */
+            color: #333;
+            transition: border-color 0.3s ease;
         }
+
+        input:focus {
+            border-color: #7b1fa2; /* Purple border when focused */
+            outline: none;
+        }
+
+        /* Buttons */
         button {
-            background-color: #0000cc;
-            color: white;
+            background-color: #e1e4e8; /* Light grey button background */
+            color: #333; /* Dark text */
             border: none;
-            padding: 10px 15px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-            margin-top: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%; /* Make button full width */
         }
+
         button:hover {
-            background-color: #000099;
+            background-color: #d0d3d8; /* Slightly darker grey on hover */
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Classroom Form</h2>
-        <input type="text" id="code" placeholder="รหัสวิชา">
-        <input type="text" id="name" placeholder="ชื่อวิชา">
-        <input type="text" id="photo" placeholder="ลิงก์รูปภาพ">
-        <input type="text" id="room" placeholder="ห้องเรียน">
-        <button onclick="saveSubject()">บันทึก</button>
+        <input type="text" id="code" placeholder="Subject Code">
+        <input type="text" id="name" placeholder="Subject Name">
+        <input type="text" id="photo" placeholder="Image URL">
+        <input type="text" id="room" placeholder="Classroom">
+        <button onclick="saveSubject()">Save</button>
     </div>
 
     <script>
-        // 🔥 ตั้งค่า Firebase
+        // 🔥 Firebase setup
         const firebaseConfig = {
             apiKey: "AIzaSyChd5kiWywUOAh3XYCn_02hWY0jmjJGRzM",
             authDomain: "projectfinalwebapplication2568.firebaseapp.com",
@@ -75,21 +97,21 @@
             const photo = document.getElementById("photo").value.trim();
             const room = document.getElementById("room").value.trim();
 
-            // ✅ ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
+            // ✅ Check if user is logged in
             firebase.auth().onAuthStateChanged(user => {
                 if (!user) {
-                    alert("กรุณาเข้าสู่ระบบก่อน");
+                    alert("Please log in first");
                     return;
                 }
 
-                const userId = user.uid; // ใช้ UID ของผู้ใช้เป็นที่เก็บข้อมูลเฉพาะของเขา
+                const userId = user.uid; // Use user UID to store their unique data
 
                 if (!code || !name || !room) {
-                    alert("กรุณากรอกข้อมูลให้ครบ");
+                    alert("Please fill in all fields");
                     return;
                 }
 
-                // ✅ บันทึกข้อมูลแยกตาม `userId`
+                // ✅ Save data under `userId`
                 db.collection("users").doc(userId).collection("classroom").add({
                     code: code,
                     name: name,
@@ -97,13 +119,13 @@
                     room: room,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert("✅ บันทึกข้อมูลสำเร็จ!");
-                    document.querySelectorAll("input").forEach(input => input.value = ""); // เคลียร์ค่า input
+                    alert("✅ Data saved successfully!");
+                    document.querySelectorAll("input").forEach(input => input.value = ""); // Clear input fields
                     
-                    // 🔹 หลังจากบันทึกเสร็จให้เปลี่ยนหน้าไปที่ index.html
+                    // 🔹 After saving, redirect to index.html
                     window.location.href = "index.html";
                 }).catch(error => {
-                    console.error("❌ เกิดข้อผิดพลาด: ", error);
+                    console.error("❌ Error: ", error);
                 });
             });
         }

@@ -68,12 +68,12 @@
 <body>
 
     <div class="otp-container">
-        <h2>กรอกรหัส OTP</h2>
-        <input type="text" class="input-field" id="otp" placeholder="กรอกรหัส OTP ที่ได้รับ" required>
-        <button class="verify-button" onclick="verifyOTP()">ยืนยัน OTP</button>
-        <a href="otp.html" class="back-link">กลับไปกรอกหมายเลขโทรศัพท์อีกครั้ง</a>
+        <h2>Enter OTP Code</h2>
+        <input type="text" class="input-field" id="otp" placeholder="Enter the OTP you received" required>
+        <button class="verify-button" onclick="verifyOTP()">Verify OTP</button>
+        <a href="otp.html" class="back-link">Back to re-enter phone number</a>
     </div>
-
+    
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -82,24 +82,24 @@
             projectId: "projectfinalwebapplication2568"
         };
         firebase.initializeApp(firebaseConfig);
-
+    
         // OTP Verification
         let confirmationResult = JSON.parse(localStorage.getItem("confirmationResult"));
-
+    
         function verifyOTP() {
             const otp = document.getElementById("otp").value;
-
+    
             confirmationResult.confirm(otp)
                 .then((result) => {
                     const user = result.user;
                     console.log("User verified with OTP: ", user);
-                    window.location.href = "index.html"; // เปลี่ยนไปยังหน้าหลัก
+                    window.location.href = "index.html"; // Redirect to main page
                 })
                 .catch((error) => {
-                    alert("OTP ไม่ถูกต้อง!");
+                    alert("Invalid OTP!");
                 });
         }
-    </script>
+    </script>    
 
 </body>
 </html>
