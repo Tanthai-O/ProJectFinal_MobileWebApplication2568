@@ -119,14 +119,22 @@
         </div>
         <div class="right-section">
             <h2>เข้าสู่ระบบ</h2>
+
+            <!-- Login with Email/Password -->
             <input type="email" id="email" placeholder="Email" required>
             <input type="password" id="password" placeholder="Password" required>
             <button onclick="login()">เข้าสู่ระบบ</button>
+
+            <!-- Login with Google -->
             <button class="google-btn" onclick="loginWithGoogle()">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="google-logo">
-                เข้าสู่ระบบด้วย Google
+                Sign in with Google
             </button>
+
+            <!-- Login with Phone OTP -->
             <button onclick="goToOTP()">เข้าสู่ระบบด้วย OTP</button>
+
+            <!-- Register -->
             <p>ยังไม่มีบัญชี? <a href="register.html" class="back-link">สมัครสมาชิก</a></p>
         </div>
     </div>
