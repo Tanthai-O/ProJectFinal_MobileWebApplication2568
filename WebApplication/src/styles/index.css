@@ -1,0 +1,87 @@
+/* ตั้งค่าพื้นฐาน */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* คอนเทนเนอร์หลัก */
+.container {
+    width: 90%;
+    max-width: 900px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ส่วนหัวของผู้ใช้ */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* ปุ่ม */
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+    border: none;
+    color: white;
+}
+
+.profile-btn {
+    background-color: #28a745;
+}
+.profile-btn:hover {
+    background-color: #218838;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+}
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+/* รายชื่อวิชา */
+.subject-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.subject-list li {
+    background: #f0f4f8;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.empty-list {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+    padding: 20px;
+}
