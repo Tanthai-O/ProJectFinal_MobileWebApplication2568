@@ -11,124 +11,128 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            color: #000066;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 100%;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #888888;
-        }
-        h1 {
-            color: #004ef8;
-            text-align: center;
-        }
+/* Minimal & Modern Notion-Inspired Theme */
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f7f7f8; /* Background color similar to Notion */
+    color: #333; /* Dark text for contrast */
+    margin: 0;
+    padding: 20px;
+}
 
-        /* ปรับ Layout Header */
-        .header {
-            display: flex;
-            justify-content: space-between; /* จัดให้ข้อมูลซ้ายสุด + ปุ่มขวาสุด */
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px;
-            border-bottom: 2px solid #ddd;
-        }
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff; /* White background like Notion */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-        /* จัดให้รูปโปรไฟล์และข้อมูลอยู่ซ้ายสุด */
-        .user-info-container {
-            display: flex;
-            align-items: center; /* จัดเรียงข้อมูลในแนวเดียวกัน */
-            gap: 10px; /* ระยะห่างระหว่างรูปโปรไฟล์และข้อความ */
-        }
+h1 {
+    color: #2c2c2c; /* Dark text for the heading */
+    text-align: center;
+    font-weight: 600;
+}
 
-        /* กล่องข้อความ (ชื่อ + อีเมล) */
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
+/* Header Layout */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e1e4e8; /* Lighter border */
+    gap: 5px;
+}
 
-        .user-info {
-          display: flex;
-          gap: 5px;
-          font-size: 16px;
-          margin: 0;
-        }
+.user-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
 
-        /* ปุ่มอยู่ขวาสุด */
-        .user-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+.user-details {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+}
 
-        button {
-            background-color: #0000cc;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            text-align: center;
-        }
+.user-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-        button:hover {
-            background-color: #000099;
-        }
-        /* ปรับตำแหน่งปุ่ม "เพิ่มวิชา" ให้อยู่ขวาสุด */
-        .add-subject-container {
-            display: flex;
-            justify-content: flex-end; /* ให้ปุ่มไปอยู่ขวาสุด */
-        }
+/* Buttons */
+button {
+    background-color: #e1e4e8; /* Light grey button background */
+    color: #333; /* Dark text */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
 
-        .add-subject {
-            background-color: #008000;
-        }
+button:hover {
+    background-color: #d0d3d8; /* Slightly darker grey on hover */
+    transform: scale(1.05);
+}
 
-        .subject-list {
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.add-subject {
+    background-color: #f5f5f7; /* Very light grey background */
+}
 
-        .subject-list ul {
-            list-style-type: none;
-            padding: 0;
-            width: 100%;
-        }
+.add-subject:hover {
+    background-color: #dcdde1; /* Darker grey hover */
+}
 
-        .subject-list li {
-            background: #e0ebff;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* Subject List */
+.subject-list {
+    margin-top: 20px;
+}
 
-        .manage-classroom button {
-            background-color: #ff8c00;
-        }
+.subject-list ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-        .manage-classroom button:hover {
-            background-color: #e07b00;
-        }
+.subject-list li {
+    background: #f1f3f5; /* Light grey for list items */
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
 
-        .profile-img {
-          width: 60px; /* ขนาดรูป */
-          height: 60px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 2px solid #ddd;
-        }
+.subject-list li:hover {
+    background: #e1e4e8; /* Darker grey on hover */
+    transform: translateY(-2px);
+}
+
+/* Manage button */
+.manage-classroom button {
+    background-color: #f5f5f7;
+}
+
+.manage-classroom button:hover {
+    background-color: #dcdde1;
+}
+
+/* Profile Image */
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e1e4e8;
+}
+
     </style>
     
 </head>
@@ -138,20 +142,20 @@
         <div class="header">
           <!-- 🔹 ซ้ายสุด: รูปโปรไฟล์ + ชื่อและอีเมล -->
           <div class="user-info-container">
-              <img class="profile-img" src="logo192.png" alt="รูปโปรไฟล์">
+              <img class="profile-img" src="logo192.png" alt="Profile">
               <div class="user-details">
                   <p class="user-info">
-                      <strong>ชื่อผู้ใช้:</strong> <span id="user-name">กำลังโหลด...</span>
+                      <strong>User Name :</strong> <span id="user-name">...</span>
                   </p>
                   <p class="user-info">
-                      <strong>อีเมล์ผู้ใช้:</strong> <span id="user-email">-</span>
+                      <strong>Email :</strong> <span id="user-email">-</span>
                   </p>
               </div>
           </div>
       
           <!-- 🔹 ขวาสุด: ปุ่ม "ข้อมูลส่วนตัว" และ "Logout" (เรียงแนวตั้ง) -->
           <div class="user-actions">
-              <button id="Profile-bth" onclick="toggleProfile()">ข้อมูลส่วนตัว</button>
+              <button id="Profile-bth" onclick="toggleProfile()">Your Profile</button>
               <button id="logOut-bth" onclick="toggleLogOut()">Logout</button>
           
           </div>
@@ -159,11 +163,11 @@
         </div>
 
 
-        <h2 style="text-align: center;">รายชื่อวิชาที่สอน</h2>
+        <h2 style="text-align: center;">Education Courses</h2>
 
         <!-- ปุ่มเพิ่มวิชาให้อยู่ขวาสุด -->
         <div class="add-subject-container">
-            <button id="addSubject-bth" onclick="toggleAddSubject()">เพิ่มวิชา</button>
+            <button id="addSubject-bth" onclick="toggleAddSubject()">Add Courses</button>
         </div>
 
         <!-- รายชื่อวิชาที่สอน -->
@@ -173,94 +177,96 @@
     
     </div>  
     <script>
-      // ตั้งค่า Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyChd5kiWywUOAh3XYCn_02hWY0jmjJGRzM",
-        authDomain: "projectfinalwebapplication2568.firebaseapp.com",
-        projectId: "projectfinalwebapplication2568"
-      };
-      firebase.initializeApp(firebaseConfig);
-
-      const db = firebase.firestore();
-
-
-
-      firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-              console.log("User logged in: ", user);
-              
-              const uid = user.uid; // UID ของผู้ใช้
-              const userDocRef = db.collection("users").doc(uid);
-
-              // 🔹 ดึงข้อมูลผู้ใช้จาก Firestore
-              userDocRef.onSnapshot((doc) => {
-                if (doc.exists) {
-                    const userData = doc.data();
-                    
-                    // ✅ อัปเดตค่าบน UI
-                    document.getElementById("user-name").innerText = userData.displayName || user.displayName || "ไม่ระบุ";
-                    document.getElementById("user-email").innerText = userData.email || user.email || "-";
-
-                    // ✅ อัปเดตรูปโปรไฟล์ (ถ้ามี)
-                    const profileImg = document.querySelector(".profile-img");
-                    profileImg.src = userData.photoURL || user.photoURL || "imageprofiledefault.jpg";
-                } else {
-                    console.warn("⚠️ ไม่พบข้อมูลใน Firestore");
-                }
-              });
-              // ✅ โหลดวิชาที่ผู้ใช้สร้างไว้
-              loadSubjects(uid);
-           } else {
-              console.log("❌ ยังไม่ได้เข้าสู่ระบบ");
-              window.location.href = "login.html"; // กลับไปหน้า Login
-           }
-      });
-
-      function toggleAddSubject() {
-        window.location.href = "addSubject.html";
-      }
-
-      function toggleProfile() {
-        window.location.href = "Profile.html";
-      }
-      function toggleLogOut() {
-        firebase.auth().signOut().then(() => {
-            alert("คุณออกจากระบบแล้ว!");
-            window.location.href = "login.html"; // กลับไปหน้า Login
-        }).catch((error) => {
-            console.error("เกิดข้อผิดพลาดในการออกจากระบบ:", error);
-        });
-      }
-       
-      // ✅ โหลดรายชื่อวิชาของผู้ใช้
-      function loadSubjects(userId) {
-        const subjectList = document.getElementById("subject-list1");
-        subjectList.innerHTML = "<li>กำลังโหลดข้อมูล...</li>";
-
-        db.collection("users").doc(userId).collection("classroom")
-            .orderBy("createdAt", "desc")
-            .onSnapshot((querySnapshot) => {
-                subjectList.innerHTML = ""; // ล้างข้อมูลเก่า
-                if (querySnapshot.empty) {
-                    subjectList.innerHTML = "<li>ไม่มีรายวิชา</li>";
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const subjectData = doc.data();
-                    const li = document.createElement("li");
-                    li.innerHTML = `
-                        <span>${subjectData.code} - ${subjectData.name}</span>
-                        <button onclick="manageClass('${doc.id}')">จัดการห้องเรียน</button>
-                    `;
-                    subjectList.appendChild(li);
+        // ✅ Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyChd5kiWywUOAh3XYCn_02hWY0jmjJGRzM",
+          authDomain: "projectfinalwebapplication2568.firebaseapp.com",
+          projectId: "projectfinalwebapplication2568"
+        };
+        firebase.initializeApp(firebaseConfig);
+  
+        const db = firebase.firestore();
+  
+        // ✅ Handle user authentication state
+        firebase.auth().onAuthStateChanged((user) => {
+              if (user) {
+                console.log("User logged in: ", user);
+                
+                const uid = user.uid; // User UID
+                const userDocRef = db.collection("users").doc(uid);
+  
+                // 🔹 Fetch user data from Firestore
+                userDocRef.onSnapshot((doc) => {
+                  if (doc.exists) {
+                      const userData = doc.data();
+                      
+                      // ✅ Update UI elements
+                      document.getElementById("user-name").innerText = userData.displayName || user.displayName || "-";
+                      document.getElementById("user-email").innerText = userData.email || user.email || "-";
+  
+                      // ✅ Update profile picture (if available)
+                      const profileImg = document.querySelector(".profile-img");
+                      profileImg.src = userData.photoURL || user.photoURL || "imageprofiledefault.jpg";
+                  } else {
+                      console.warn("⚠️ No user data found in Firestore");
+                  }
                 });
-            });
-    }
-
-    function manageClass(subjectId) {
-        alert("จัดการห้องเรียนสำหรับวิชา ID: " + subjectId);
-    }
-    </script>
+  
+                // ✅ Load subjects created by the user
+                loadSubjects(uid);
+             } else {
+                console.log("❌ User not logged in");
+                window.location.href = "login.html"; // Redirect to login page
+             }
+        });
+  
+        function toggleAddSubject() {
+          window.location.href = "addSubject.html";
+        }
+  
+        function toggleProfile() {
+          window.location.href = "Profile.html";
+        }
+  
+        function toggleLogOut() {
+          firebase.auth().signOut().then(() => {
+              alert("You have logged out!");
+              window.location.href = "login.html"; // Redirect to login page
+          }).catch((error) => {
+              console.error("Error while logging out:", error);
+          });
+        }
+         
+        // ✅ Load the user's subjects
+        function loadSubjects(userId) {
+          const subjectList = document.getElementById("subject-list1");
+          subjectList.innerHTML = "<li>Loading data...</li>";
+  
+          db.collection("users").doc(userId).collection("classroom")
+              .orderBy("createdAt", "desc")
+              .onSnapshot((querySnapshot) => {
+                  subjectList.innerHTML = ""; // Clear existing data
+                  if (querySnapshot.empty) {
+                      subjectList.innerHTML = "<li>No subjects available</li>";
+                      return;
+                  }
+  
+                  querySnapshot.forEach((doc) => {
+                      const subjectData = doc.data();
+                      const li = document.createElement("li");
+                      li.innerHTML = `
+                          <span>${subjectData.code} - ${subjectData.name}</span>
+                          <button onclick="manageClass('${doc.id}')">Manage Classroom</button>
+                      `;
+                      subjectList.appendChild(li);
+                  });
+              });
+      }
+  
+      function manageClass(subjectId) {
+          alert("Managing classroom for subject ID: " + subjectId);
+      }
+  </script>
+  
 </body>
 </html>
